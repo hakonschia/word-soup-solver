@@ -2,6 +2,9 @@ package soup
 
 import util.Coordinates
 
+/**
+ * @param boardToSolve The board to solve (must be an n*n square)
+ */
 class SoupSolver(
     boardToSolve: Array<CharArray>
 ) {
@@ -27,8 +30,13 @@ class SoupSolver(
         board = boardToSolve.clone()
 
         // Ensure all characters are lowercased as a lowercase letter is seen as "no solution" for that given character
-        board.forEachIndexed { outerIndex, array ->
-            array.forEachIndexed { innerIndex, c ->
+        board.forEachIndexed { outerIndex, row ->
+            // Check that each row is equal size to the column (the board is a perfect square)
+            check(row.size == board.size) {
+                "Given board is not a square"
+            }
+
+            row.forEachIndexed { innerIndex, c ->
                 board[outerIndex][innerIndex] = c.lowercaseChar()
             }
         }
@@ -50,7 +58,9 @@ class SoupSolver(
             this::checkColumns,
             this::checkReverseColumns,
             this::checkDownwardsDiagonal,
-            this::checkUpwardsDiagonal
+            this::checkReverseDownwardsDiagonal,
+            this::checkUpwardsDiagonal,
+            this::checkReverseUpwardsDiagonal
         )
 
         // Call each function until we find a match
@@ -178,13 +188,48 @@ class SoupSolver(
         return null
     }
 
+
+    /**
+     * Builds a word from [board] for a given column
+     *
+     * @param column The column to build on (no checks is done that this is a valid number)
+     * @return The word built on the given column
+     */
+    private fun buildColumnWord(column: Int): String {
+        val columnWordBuilder = StringBuilder()
+
+        // Append the character at the column for each row to build the word
+        board.forEach { row ->
+            columnWordBuilder.append(row[column])
+        }
+
+        return columnWordBuilder.toString()
+    }
+
     /**
      * Checks the columns word a word
      *
      * @return A solution, or `null` if no solution was found
      */
     private fun checkColumns(word: String): SoupWordSolution? {
-        TODO()
+        for (rowIndex in board.indices) {
+            val columnWord = buildColumnWord(rowIndex)
+
+            // We need to ignore the case as words can overlap, which means it can match either
+            val startPos = columnWord.indexOf(word, ignoreCase = true)
+
+            if (startPos != -1) {
+                return SoupWordSolution(
+                    word = word,
+                    startCoordinates = Coordinates(x = rowIndex, y = startPos),
+                    // -1 as "WORD" ends at index 3, not 4
+                    endCoordinates = Coordinates(x = rowIndex, y = startPos + word.length - 1),
+                    direction = WordDirection.VERTICAL
+                )
+            }
+        }
+
+        return null
     }
 
     /**
@@ -206,11 +251,29 @@ class SoupSolver(
     }
 
     /**
+     * Checks the reverse downwards diagonal for a word
+     *
+     * @return A solution, or `null` if no solution was found
+     */
+    private fun checkReverseDownwardsDiagonal(word: String): SoupWordSolution? {
+        TODO()
+    }
+
+    /**
      * Checks the upwards diagonal for a word
      *
      * @return A solution, or `null` if no solution was found
      */
     private fun checkUpwardsDiagonal(word: String): SoupWordSolution? {
+        TODO()
+    }
+
+    /**
+     * Checks the reverse upwards diagonal for a word
+     *
+     * @return A solution, or `null` if no solution was found
+     */
+    private fun checkReverseUpwardsDiagonal(word: String): SoupWordSolution? {
         TODO()
     }
 }
