@@ -119,7 +119,25 @@ class SoupSolver(
      * @return A solution, or `null` if no solution was found
      */
     private fun checkRows(word: String): SoupWordSolution? {
-        TODO()
+        board.forEachIndexed { rowIndex, row ->
+            val rowAsString = row.joinToString("")
+
+            // We need to ignore the case as words can overlap, which means it can match either
+            val startPos = rowAsString.indexOf(word, ignoreCase = true)
+
+            if (startPos != -1) {
+                return SoupWordSolution(
+                    word = word,
+                    startCoordinates = Coordinates(x = startPos, y = rowIndex),
+                    // -1 as "WORD" ends at index 3, not 4
+                    endCoordinates = Coordinates(x = startPos + word.length - 1, y = rowIndex),
+                    direction = WordDirection.HORIZONTAL
+                )
+            }
+        }
+
+        // No solution found
+        return null
     }
 
     /**
@@ -128,7 +146,36 @@ class SoupSolver(
      * @return A solution, or `null` if no solution was found
      */
     private fun checkReverseRows(word: String): SoupWordSolution? {
-        TODO()
+        board.forEachIndexed { rowIndex, row ->
+            val rowAsString = row.joinToString("").reversed()
+
+            // We need to ignore the case as words can overlap, which means it can match either
+            val startPos = rowAsString.indexOf(word, ignoreCase = true)
+
+            if (startPos != -1) {
+                return SoupWordSolution(
+                    word = word,
+                    // The start and end for reversed words are also reversed
+
+                    // For row: RNESPOMSWPZBDA
+                    // The reversed word "MOPSEN" is from index 1 to 6 (in the original word as "NESPOM")
+
+                    // Reverse the row: ADBZPWSMOPSENR
+                    // startPos = 7
+
+                    // -1 as "WORD" ends at index 3, not 4
+                    // 14 - 7 - 1 = 6
+                    startCoordinates = Coordinates(x = rowAsString.length - startPos - 1, y = rowIndex),
+
+                    // 14 - 7 - 6 = 1
+                    endCoordinates = Coordinates(x = rowAsString.length - startPos - word.length, y = rowIndex),
+                    direction = WordDirection.HORIZONTAL_REVERSE
+                )
+            }
+        }
+
+        // No solution found
+        return null
     }
 
     /**
