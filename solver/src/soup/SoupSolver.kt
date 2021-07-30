@@ -238,7 +238,26 @@ class SoupSolver(
      * @return A solution, or `null` if no solution was found
      */
     private fun checkReverseColumns(word: String): SoupWordSolution? {
-        TODO()
+        for (rowIndex in board.indices) {
+            val columnWord = buildColumnWord(rowIndex).reversed()
+
+            // We need to ignore the case as words can overlap, which means it can match either
+            val startPos = columnWord.indexOf(word, ignoreCase = true)
+
+            if (startPos != -1) {
+                return SoupWordSolution(
+                    word = word,
+
+                    // See documentation for the reversed rows
+                    // Using "board.size" we assume an n*n square (which is currently true based on init{}"
+                    startCoordinates = Coordinates(x = rowIndex, y = board.size - startPos - 1),
+                    endCoordinates = Coordinates(x = rowIndex, y = board.size - startPos - word.length),
+                    direction = WordDirection.VERTICAL_REVERSE
+                )
+            }
+        }
+
+        return null
     }
 
     /**

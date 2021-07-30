@@ -110,8 +110,8 @@ internal class SoupSolverTest {
         solution = solver.findWord("MORGEN")
         assertNotNull(solution)
         assertEquals(WordDirection.VERTICAL_REVERSE, solution.direction)
-        assertEquals(2, solution.startCoordinates.x)
-        assertEquals(2, solution.endCoordinates.x)
+        assertEquals(1, solution.startCoordinates.x)
+        assertEquals(1, solution.endCoordinates.x)
         assertEquals(11, solution.startCoordinates.y)
         assertEquals(6, solution.endCoordinates.y)
 
