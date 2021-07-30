@@ -91,29 +91,29 @@ internal class SoupSolverTest {
         // TÅTA is reversed at column 0
         solution = solver.findWord("TÅTA")
         assertNotNull(solution)
-        assertEquals(WordDirection.VERTICAL, solution.direction)
+        assertEquals(WordDirection.VERTICAL_REVERSE, solution.direction)
         assertEquals(0, solution.startCoordinates.x)
         assertEquals(0, solution.endCoordinates.x)
-        assertEquals(3, solution.startCoordinates.y)
-        assertEquals(6, solution.endCoordinates.y)
+        assertEquals(6, solution.startCoordinates.y)
+        assertEquals(3, solution.endCoordinates.y)
 
         // JESUS is reversed at column 7
         solution = solver.findWord("JESUS")
         assertNotNull(solution)
-        assertEquals(WordDirection.VERTICAL, solution.direction)
+        assertEquals(WordDirection.VERTICAL_REVERSE, solution.direction)
         assertEquals(7, solution.startCoordinates.x)
         assertEquals(7, solution.endCoordinates.x)
-        assertEquals(1, solution.startCoordinates.y)
-        assertEquals(5, solution.endCoordinates.y)
+        assertEquals(5, solution.startCoordinates.y)
+        assertEquals(1, solution.endCoordinates.y)
 
         // MORGEN is reversed at column 2
         solution = solver.findWord("MORGEN")
         assertNotNull(solution)
-        assertEquals(WordDirection.VERTICAL, solution.direction)
+        assertEquals(WordDirection.VERTICAL_REVERSE, solution.direction)
         assertEquals(2, solution.startCoordinates.x)
         assertEquals(2, solution.endCoordinates.x)
-        assertEquals(7, solution.startCoordinates.y)
-        assertEquals(12, solution.endCoordinates.y)
+        assertEquals(11, solution.startCoordinates.y)
+        assertEquals(6, solution.endCoordinates.y)
 
 
         // DIAGONALLY UPWARDS WORDS
@@ -123,9 +123,9 @@ internal class SoupSolverTest {
         solution = solver.findWord("SVENNEN")
         assertNotNull(solution)
         assertEquals(WordDirection.DIAGONAL_UP, solution.direction)
-        assertEquals(8, solution.startCoordinates.x)
-        assertEquals(2, solution.endCoordinates.x)
-        assertEquals(9, solution.startCoordinates.y)
+        assertEquals(2, solution.startCoordinates.x)
+        assertEquals(8, solution.endCoordinates.x)
+        assertEquals(8, solution.startCoordinates.y)
         assertEquals(3, solution.endCoordinates.y)
 
         // JFR is from column 3 to column 5, row 12 to row 10
@@ -147,8 +147,8 @@ internal class SoupSolverTest {
         assertEquals(WordDirection.DIAGONAL_UP_REVERSE, solution.direction)
         assertEquals(8, solution.startCoordinates.x)
         assertEquals(2, solution.endCoordinates.x)
-        assertEquals(2, solution.startCoordinates.y)
-        assertEquals(8, solution.endCoordinates.y)
+        assertEquals(8, solution.startCoordinates.y)
+        assertEquals(2, solution.endCoordinates.y)
 
 
         // DIAGONALLY DOWNWARDS WORDS
