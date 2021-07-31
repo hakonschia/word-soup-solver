@@ -229,6 +229,7 @@ class SoupSolver(
             }
         }
 
+        // No solution found
         return null
     }
 
@@ -257,8 +258,32 @@ class SoupSolver(
             }
         }
 
+        // No solution found
         return null
     }
+
+
+    /**
+     * Builds a word on the downward diagonal for a column in [board]
+     *
+     * @param columnOrRow The index of the column or row to build the diagonal on
+     * @param buildForColumns If true, [columnOrRow] indicates the index of a column, if false it indicates the index of a row
+     */
+    private fun buildDownwardDiagonalOnColumns(columnOrRow: Int, buildForColumns: Boolean): String {
+        val wordBuilder = StringBuilder()
+
+        for (i in 0 until board.size - columnOrRow) {
+            // The diagonal is offset by the column/row index
+            if (buildForColumns) {
+                wordBuilder.append(board[i][i + columnOrRow])
+            } else {
+                wordBuilder.append(board[i + columnOrRow][i])
+            }
+        }
+
+        return wordBuilder.toString()
+    }
+
 
     /**
      * Checks the downwards diagonal for a word
@@ -266,7 +291,40 @@ class SoupSolver(
      * @return A solution, or `null` if no solution was found
      */
     private fun checkDownwardsDiagonal(word: String): SoupWordSolution? {
-        TODO()
+        for (rowIndex in board.indices) {
+            // On an n*n square we can use rowIndex, but if we're not on n*n this wouldn't work
+            val columnWord = buildDownwardDiagonalOnColumns(rowIndex, buildForColumns = true)
+
+            // We need to ignore the case as words can overlap, which means it can match either
+            val startPosColumn = columnWord.indexOf(word, ignoreCase = true)
+
+            if (startPosColumn != -1) {
+                return SoupWordSolution(
+                    word = word,
+                    startCoordinates = Coordinates(x = rowIndex + startPosColumn, y = startPosColumn),
+                    endCoordinates = Coordinates(x = rowIndex + startPosColumn + word.length - 1, y = startPosColumn + word.length - 1),
+                    direction = WordDirection.DIAGONAL_DOWN
+                )
+            }
+
+            val rowWord = buildDownwardDiagonalOnColumns(rowIndex, buildForColumns = false)
+
+            // We need to ignore the case as words can overlap, which means it can match either
+            val startPosRow = rowWord.indexOf(word, ignoreCase = true)
+
+            if (startPosRow != -1) {
+                return SoupWordSolution(
+                    word = word,
+
+                    startCoordinates = Coordinates(x = startPosRow, y = rowIndex + startPosRow),
+                    endCoordinates = Coordinates(x = startPosRow + word.length - 1, y = rowIndex + startPosRow + word.length - 1),
+                    direction = WordDirection.DIAGONAL_DOWN
+                )
+            }
+        }
+
+        // No solution found
+        return null
     }
 
     /**

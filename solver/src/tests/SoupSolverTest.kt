@@ -116,41 +116,6 @@ internal class SoupSolverTest {
         assertEquals(6, solution.endCoordinates.y)
 
 
-        // DIAGONALLY UPWARDS WORDS
-        // Words: SVENNEN, JFR
-
-        // SVENNEN is from column 2 to column 8, row 9 to row 3
-        solution = solver.findWord("SVENNEN")
-        assertNotNull(solution)
-        assertEquals(WordDirection.DIAGONAL_UP, solution.direction)
-        assertEquals(2, solution.startCoordinates.x)
-        assertEquals(8, solution.endCoordinates.x)
-        assertEquals(8, solution.startCoordinates.y)
-        assertEquals(3, solution.endCoordinates.y)
-
-        // JFR is from column 3 to column 5, row 12 to row 10
-        solution = solver.findWord("JFR")
-        assertNotNull(solution)
-        assertEquals(WordDirection.DIAGONAL_UP, solution.direction)
-        assertEquals(3, solution.startCoordinates.x)
-        assertEquals(5, solution.endCoordinates.x)
-        assertEquals(12, solution.startCoordinates.y)
-        assertEquals(10, solution.endCoordinates.y)
-
-
-        // DIAGONALLY UPWARDS REVERSED WORDS
-        // Words: FORDØMT
-
-        // FORDØMT is from column 8 to column 2, row 8 to row 2
-        solution = solver.findWord("FORDØMT")
-        assertNotNull(solution)
-        assertEquals(WordDirection.DIAGONAL_UP_REVERSE, solution.direction)
-        assertEquals(8, solution.startCoordinates.x)
-        assertEquals(2, solution.endCoordinates.x)
-        assertEquals(8, solution.startCoordinates.y)
-        assertEquals(2, solution.endCoordinates.y)
-
-
         // DIAGONALLY DOWNWARDS WORDS
         // Words: SÆREGEN, STILTE, SVEIS
 
@@ -193,6 +158,41 @@ internal class SoupSolverTest {
         assertEquals(2, solution.endCoordinates.x)
         assertEquals(2, solution.startCoordinates.y)
         assertEquals(11, solution.endCoordinates.y)
+
+
+        // DIAGONALLY UPWARDS WORDS
+        // Words: SVENNEN, JFR
+
+        // SVENNEN is from column 2 to column 8, row 9 to row 3
+        solution = solver.findWord("SVENNEN")
+        assertNotNull(solution)
+        assertEquals(WordDirection.DIAGONAL_UP, solution.direction)
+        assertEquals(2, solution.startCoordinates.x)
+        assertEquals(8, solution.endCoordinates.x)
+        assertEquals(8, solution.startCoordinates.y)
+        assertEquals(3, solution.endCoordinates.y)
+
+        // JFR is from column 3 to column 5, row 12 to row 10
+        solution = solver.findWord("JFR")
+        assertNotNull(solution)
+        assertEquals(WordDirection.DIAGONAL_UP, solution.direction)
+        assertEquals(3, solution.startCoordinates.x)
+        assertEquals(5, solution.endCoordinates.x)
+        assertEquals(12, solution.startCoordinates.y)
+        assertEquals(10, solution.endCoordinates.y)
+
+
+        // DIAGONALLY UPWARDS REVERSED WORDS
+        // Words: FORDØMT
+
+        // FORDØMT is from column 8 to column 2, row 8 to row 2
+        solution = solver.findWord("FORDØMT")
+        assertNotNull(solution)
+        assertEquals(WordDirection.DIAGONAL_UP_REVERSE, solution.direction)
+        assertEquals(8, solution.startCoordinates.x)
+        assertEquals(2, solution.endCoordinates.x)
+        assertEquals(8, solution.startCoordinates.y)
+        assertEquals(2, solution.endCoordinates.y)
 
     }
 
