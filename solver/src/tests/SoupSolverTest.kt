@@ -150,6 +150,46 @@ internal class SoupSolverTest {
         // DIAGONALLY DOWNWARDS REVERSED WORDS
         // Words: AGNOSTIKER
 
+        // LNEN is from column 9 to column 6, row 2 to row 5
+        // (not really a word in the board it is taken from, just a test case for a reversed diagonal column)
+        solution = solver.findWord("LNEN")
+        assertNotNull(solution)
+        assertEquals(WordDirection.DIAGONAL_DOWN_REVERSE, solution.direction)
+        assertEquals(9, solution.startCoordinates.x)
+        assertEquals(6, solution.endCoordinates.x)
+        assertEquals(2, solution.startCoordinates.y)
+        assertEquals(5, solution.endCoordinates.y)
+
+        // ENYT is from column 13 to column 10, row 8 to row 11
+        // (not really a word in the board it is taken from, just a test case for a reversed diagonal row)
+        solution = solver.findWord("ENYT")
+        assertNotNull(solution)
+        assertEquals(WordDirection.DIAGONAL_DOWN_REVERSE, solution.direction)
+        assertEquals(13, solution.startCoordinates.x)
+        assertEquals(10, solution.endCoordinates.x)
+        assertEquals(8, solution.startCoordinates.y)
+        assertEquals(11, solution.endCoordinates.y)
+
+        // ÅSE is from column 11 to column 9, row 8 to row 11
+        // (not really a word in the board it is taken from, just a test case for a reversed diagonal row)
+        solution = solver.findWord("ÅSE")
+        assertNotNull(solution)
+        assertEquals(WordDirection.DIAGONAL_DOWN_REVERSE, solution.direction)
+        assertEquals(11, solution.startCoordinates.x)
+        assertEquals(9, solution.endCoordinates.x)
+        assertEquals(8, solution.startCoordinates.y)
+        assertEquals(10, solution.endCoordinates.y)
+
+        // ÅSE is from column 9 to column 4, row 6 to row 11
+        // (not really a word in the board it is taken from, just a test case for a reversed diagonal row)
+        solution = solver.findWord("TWRSRF")
+        assertNotNull(solution)
+        assertEquals(WordDirection.DIAGONAL_DOWN_REVERSE, solution.direction)
+        assertEquals(9, solution.startCoordinates.x)
+        assertEquals(4, solution.endCoordinates.x)
+        assertEquals(6, solution.startCoordinates.y)
+        assertEquals(11, solution.endCoordinates.y)
+
         // AGNOSTIKER is from column 11 to column 2, row 2 to row 11
         solution = solver.findWord("AGNOSTIKER")
         assertNotNull(solution)

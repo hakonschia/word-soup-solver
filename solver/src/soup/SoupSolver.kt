@@ -264,12 +264,12 @@ class SoupSolver(
 
 
     /**
-     * Builds a word on the downward diagonal for a column in [board]
+     * Builds a word on the downward diagonal for a column or row in [board]
      *
      * @param columnOrRow The index of the column or row to build the diagonal on
      * @param buildForColumns If true, [columnOrRow] indicates the index of a column, if false it indicates the index of a row
      */
-    private fun buildDownwardDiagonalOnColumns(columnOrRow: Int, buildForColumns: Boolean): String {
+    private fun buildDownwardDiagonal(columnOrRow: Int, buildForColumns: Boolean): String {
         val wordBuilder = StringBuilder()
 
         for (i in 0 until board.size - columnOrRow) {
@@ -293,7 +293,7 @@ class SoupSolver(
     private fun checkDownwardsDiagonal(word: String): SoupWordSolution? {
         for (rowIndex in board.indices) {
             // On an n*n square we can use rowIndex, but if we're not on n*n this wouldn't work
-            val columnWord = buildDownwardDiagonalOnColumns(rowIndex, buildForColumns = true)
+            val columnWord = buildDownwardDiagonal(rowIndex, buildForColumns = true)
 
             // We need to ignore the case as words can overlap, which means it can match either
             val startPosColumn = columnWord.indexOf(word, ignoreCase = true)
@@ -307,7 +307,7 @@ class SoupSolver(
                 )
             }
 
-            val rowWord = buildDownwardDiagonalOnColumns(rowIndex, buildForColumns = false)
+            val rowWord = buildDownwardDiagonal(rowIndex, buildForColumns = false)
 
             // We need to ignore the case as words can overlap, which means it can match either
             val startPosRow = rowWord.indexOf(word, ignoreCase = true)
@@ -327,13 +327,86 @@ class SoupSolver(
         return null
     }
 
+
+    /**
+     * Builds a word on the downward reverse diagonal for a column or row in [board]. Words are built from the top right
+     * of the board
+     *
+     * @param columnOrRow The index of the column or row to build the diagonal on
+     * @param buildForColumns If true, [columnOrRow] indicates the index of a column, if false it indicates the index of a row
+     */
+    private fun buildReverseDownwardDiagonal(columnOrRow: Int, buildForColumns: Boolean): String {
+        val wordBuilder = StringBuilder()
+
+        for (i in 0 until board.size - columnOrRow) {
+            val pos = board.size - 1 - i
+
+            // Not sure how to explain this
+            // We're starting from top right, i.e. (0, board.size - 1)
+            // So just look at a board and try to figure it out :)
+            if (buildForColumns) {
+                wordBuilder.append(board[i][pos - columnOrRow])
+            } else {
+                wordBuilder.append(board[columnOrRow + i][pos])
+            }
+        }
+
+        return wordBuilder.toString()
+    }
+
+
     /**
      * Checks the reverse downwards diagonal for a word
      *
      * @return A solution, or `null` if no solution was found
      */
     private fun checkReverseDownwardsDiagonal(word: String): SoupWordSolution? {
-        TODO()
+        for (rowIndex in board.indices) {
+            // On an n*n square we can use rowIndex, but if we're not on n*n this wouldn't work
+            val columnWord = buildReverseDownwardDiagonal(rowIndex, buildForColumns = true)
+
+            // We need to ignore the case as words can overlap, which means it can match either
+            val startPosColumn = columnWord.indexOf(word, ignoreCase = true)
+
+            if (startPosColumn != -1) {
+                return SoupWordSolution(
+                    word = word,
+                    startCoordinates = Coordinates(
+                        // - 1 on the board size since we're 0-indexed
+                        x = board.size - 1 - rowIndex - startPosColumn,
+                        // Y is just downwards, and the entire diagonal is in columnWord
+                        y = startPosColumn
+                    ),
+                    endCoordinates = Coordinates(
+                        // + 1 for the correct word index
+                        x = board.size - 1 - rowIndex - startPosColumn - word.length + 1,
+                        // - 1 for the correct word index
+                        y = startPosColumn + word.length - 1
+                    ),
+                    direction = WordDirection.DIAGONAL_DOWN_REVERSE
+                )
+            }
+
+            val rowWord = buildReverseDownwardDiagonal(rowIndex, buildForColumns = false)
+
+            // We need to ignore the case as words can overlap, which means it can match either
+            val startPosRow = rowWord.indexOf(word, ignoreCase = true)
+
+            if (startPosRow != -1) {
+                return SoupWordSolution(
+                    word = word,
+                    startCoordinates = Coordinates(x = (board.size - 1) - startPosRow, y = rowIndex + startPosRow),
+                    endCoordinates = Coordinates(
+                        x = (board.size - 1) - startPosRow - (word.length - 1),
+                        y = rowIndex + startPosRow + word.length - 1
+                    ),
+                    direction = WordDirection.DIAGONAL_DOWN_REVERSE
+                )
+            }
+        }
+
+        // No solution found
+        return null
     }
 
     /**
@@ -343,6 +416,32 @@ class SoupSolver(
      */
     private fun checkUpwardsDiagonal(word: String): SoupWordSolution? {
         TODO()
+    }
+
+
+    /**
+     * Builds a word on the downward reverse diagonal for a column or row in [board]. Words are built from the top right
+     * of the board
+     *
+     * @param columnOrRow The index of the column or row to build the diagonal on
+     * @param buildForColumns If true, [columnOrRow] indicates the index of a column, if false it indicates the index of a row
+     */
+    private fun buildReverseUpwardsDiagonal(columnOrRow: Int, buildForColumns: Boolean): String {
+        val wordBuilder = StringBuilder()
+
+
+        // This works for the first row, so it's probably something valid here (this was an accidental find from another function:))
+
+        for (i in board.size - 1 downTo 0) {
+            // The diagonal is offset by the column/row index
+            if (buildForColumns) {
+                wordBuilder.append(board[columnOrRow + i][i - columnOrRow])
+            } else {
+                wordBuilder.append(board[i - columnOrRow][columnOrRow + i])
+            }
+        }
+
+        return wordBuilder.toString()
     }
 
     /**
