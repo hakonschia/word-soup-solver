@@ -357,12 +357,9 @@ internal class SoupSolverTest {
 
         val solver = SoupSolver(board)
 
-        var generatedBoard: String
-
         // ESL is at the top row
         solver.findWord("ESL")
 
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 E S L f v
@@ -371,7 +368,7 @@ internal class SoupSolverTest {
                 a m i m f
                 t f s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
 
         solver.findWord("TQW")
@@ -383,7 +380,7 @@ internal class SoupSolverTest {
                 a m i m f
                 t f s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
     }
 
@@ -402,10 +399,7 @@ internal class SoupSolverTest {
 
         val solver = SoupSolver(board)
 
-        var generatedBoard: String
-
         solver.findWord("FLS")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 e S L F v
@@ -414,11 +408,10 @@ internal class SoupSolverTest {
                 a m i m f
                 t f s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
 
         solver.findWord("FMI")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 e S L F v
@@ -427,41 +420,9 @@ internal class SoupSolverTest {
                 a m I M F
                 t f s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
     }
-    /*
-        /**
-     * Tests that a <> word produces the correct generated board
-     */
-    @Test
-    fun generatedBoard<>Word() {
-        val board = arrayOf(
-            charArrayOf('E', 'S', 'L', 'F', 'V'),
-            charArrayOf('R', 'N', 'E', 'S', 'P'),
-            charArrayOf('E', 'O', 'T', 'Q', 'W'),
-            charArrayOf('A', 'M', 'I', 'M', 'F'),
-            charArrayOf('T', 'F', 'S', 'S', 'Ø'),
-        )
-
-        val solver = SoupSolver(board)
-
-        var generatedBoard: String
-
-        solver.findWord("FLS")
-        generatedBoard = solver.generateBoard()
-        assertEquals(
-            """
-                e s l f v
-                r n e s p
-                e o t q w
-                a m i m f
-                t f s s ø
-            """.trimIndent(),
-            generatedBoard
-        )
-    }
-     */
 
     /**
      * Tests that a vertical word produces the correct generated board
@@ -478,10 +439,7 @@ internal class SoupSolverTest {
 
         val solver = SoupSolver(board)
 
-        var generatedBoard: String
-
         solver.findWord("REA")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 e s l f v
@@ -490,11 +448,10 @@ internal class SoupSolverTest {
                 A m i m f
                 t f s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
 
         solver.findWord("WFØ")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 e s l f v
@@ -503,7 +460,7 @@ internal class SoupSolverTest {
                 A m i m F
                 t f s s Ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
     }
 
@@ -522,10 +479,7 @@ internal class SoupSolverTest {
 
         val solver = SoupSolver(board)
 
-        var generatedBoard: String
-
         solver.findWord("FMO")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 e s l f v
@@ -534,11 +488,10 @@ internal class SoupSolverTest {
                 a M i m f
                 t F s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
 
         solver.findWord("MQS")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 e s l f v
@@ -547,7 +500,7 @@ internal class SoupSolverTest {
                 a M i M f
                 t F s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
     }
 
@@ -566,10 +519,7 @@ internal class SoupSolverTest {
 
         val solver = SoupSolver(board)
 
-        var generatedBoard: String
-
         solver.findWord("ENT")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 E s l f v
@@ -578,11 +528,10 @@ internal class SoupSolverTest {
                 a m i m f
                 t f s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
 
         solver.findWord("TMØ")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 E s l f v
@@ -591,7 +540,7 @@ internal class SoupSolverTest {
                 a m i M f
                 t f s s Ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
     }
 
@@ -610,10 +559,7 @@ internal class SoupSolverTest {
 
         val solver = SoupSolver(board)
 
-        var generatedBoard: String
-
         solver.findWord("VST")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 e s l f V
@@ -622,11 +568,10 @@ internal class SoupSolverTest {
                 a m i m f
                 t f s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
 
         solver.findWord("WMS")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 e s l f V
@@ -635,7 +580,7 @@ internal class SoupSolverTest {
                 a m i M f
                 t f S s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
     }
 
@@ -654,10 +599,7 @@ internal class SoupSolverTest {
 
         val solver = SoupSolver(board)
 
-        var generatedBoard: String
-
         solver.findWord("TMT")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 e s l f v
@@ -666,11 +608,10 @@ internal class SoupSolverTest {
                 a M i m f
                 T f s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
 
         solver.findWord("RS")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 e S l f v
@@ -679,7 +620,7 @@ internal class SoupSolverTest {
                 a M i m f
                 T f s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
     }
 
@@ -698,10 +639,7 @@ internal class SoupSolverTest {
 
         val solver = SoupSolver(board)
 
-        var generatedBoard: String
-
         solver.findWord("SIO")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 e s l f v
@@ -710,24 +648,10 @@ internal class SoupSolverTest {
                 a m I m f
                 t f s S ø
             """.trimIndent(),
-            generatedBoard
-        )
-
-        solver.findWord("SIO")
-        generatedBoard = solver.generateBoard()
-        assertEquals(
-            """
-                e s l f v
-                r n e s p
-                e O t q w
-                a m I m f
-                t f s S ø
-            """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
 
         solver.findWord("WSL")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 e s L f v
@@ -736,7 +660,7 @@ internal class SoupSolverTest {
                 a m I m f
                 t f s S ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
     }
 
@@ -752,12 +676,9 @@ internal class SoupSolverTest {
 
         val solver = SoupSolver(board)
 
-        var generatedBoard: String
 
         // ESL is at the top row
         solver.findWord("ESL")
-
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 E S L f v
@@ -766,13 +687,11 @@ internal class SoupSolverTest {
                 a m i m f
                 t f s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
 
         // The "L" in "LET" is part of "ESL", so this tests that the highlight of one character can be part of two words
         solver.findWord("LET")
-
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 E S L f v
@@ -781,11 +700,10 @@ internal class SoupSolverTest {
                 a m i m f
                 t f s s ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
 
         solver.findWord("ØMT")
-        generatedBoard = solver.generateBoard()
         assertEquals(
             """
                 E S L f v
@@ -794,7 +712,7 @@ internal class SoupSolverTest {
                 a m i M f
                 t f s s Ø
             """.trimIndent(),
-            generatedBoard
+            solver.generateBoard()
         )
     }
 }
