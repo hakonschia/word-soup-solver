@@ -255,6 +255,7 @@ internal class SoupSolverTest {
         assertEquals(2, solution.endCoordinates.y)
 
         // NNUM is from column 9 to column 6, row 4 to row 1
+        // (not really a word in the board it is taken from, just a test case for a reversed upwards diagonal row)
         solution = solver.findWord("NNUM")
         assertNotNull(solution)
         assertEquals(WordDirection.DIAGONAL_UP_REVERSE, solution.direction)
@@ -263,7 +264,15 @@ internal class SoupSolverTest {
         assertEquals(4, solution.startCoordinates.y)
         assertEquals(1, solution.endCoordinates.y)
 
-
+        // NNUM is from column 6 to column 4, row 10 to row 8
+        // (not really a word in the board it is taken from, just a test case for a reversed upwards diagonal row)
+        solution = solver.findWord("PEN")
+        assertNotNull(solution)
+        assertEquals(WordDirection.DIAGONAL_UP_REVERSE, solution.direction)
+        assertEquals(6, solution.startCoordinates.x)
+        assertEquals(4, solution.endCoordinates.x)
+        assertEquals(10, solution.startCoordinates.y)
+        assertEquals(8, solution.endCoordinates.y)
     }
 
 
