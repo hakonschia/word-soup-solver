@@ -209,7 +209,17 @@ internal class SoupSolverTest {
         assertEquals(WordDirection.DIAGONAL_UP, solution.direction)
         assertEquals(2, solution.startCoordinates.x)
         assertEquals(8, solution.endCoordinates.x)
-        assertEquals(8, solution.startCoordinates.y)
+        assertEquals(9, solution.startCoordinates.y)
+        assertEquals(3, solution.endCoordinates.y)
+
+        // TCSM is from column 0 to column 3, row 6 to row 3
+        // (not really a word in the board it is taken from, just a test case for an upwards diagonal row)
+        solution = solver.findWord("TCSM")
+        assertNotNull(solution)
+        assertEquals(WordDirection.DIAGONAL_UP, solution.direction)
+        assertEquals(0, solution.startCoordinates.x)
+        assertEquals(3, solution.endCoordinates.x)
+        assertEquals(6, solution.startCoordinates.y)
         assertEquals(3, solution.endCoordinates.y)
 
         // JFR is from column 3 to column 5, row 12 to row 10
@@ -220,6 +230,16 @@ internal class SoupSolverTest {
         assertEquals(5, solution.endCoordinates.x)
         assertEquals(12, solution.startCoordinates.y)
         assertEquals(10, solution.endCoordinates.y)
+
+        // EREKIT is from column 1 to column 6, row 12 to row 7
+        // (not really a word in the board it is taken from, just a test case for an upwards diagonal row)
+        solution = solver.findWord("EREKIT")
+        assertNotNull(solution)
+        assertEquals(WordDirection.DIAGONAL_UP, solution.direction)
+        assertEquals(1, solution.startCoordinates.x)
+        assertEquals(6, solution.endCoordinates.x)
+        assertEquals(12, solution.startCoordinates.y)
+        assertEquals(7, solution.endCoordinates.y)
 
 
         // DIAGONALLY UPWARDS REVERSED WORDS
@@ -233,6 +253,16 @@ internal class SoupSolverTest {
         assertEquals(2, solution.endCoordinates.x)
         assertEquals(8, solution.startCoordinates.y)
         assertEquals(2, solution.endCoordinates.y)
+
+        // NNUM is from column 9 to column 6, row 4 to row 1
+        solution = solver.findWord("NNUM")
+        assertNotNull(solution)
+        assertEquals(WordDirection.DIAGONAL_UP_REVERSE, solution.direction)
+        assertEquals(9, solution.startCoordinates.x)
+        assertEquals(6, solution.endCoordinates.x)
+        assertEquals(4, solution.startCoordinates.y)
+        assertEquals(1, solution.endCoordinates.y)
+
 
     }
 

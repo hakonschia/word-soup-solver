@@ -395,7 +395,10 @@ class SoupSolver(
             if (startPosRow != -1) {
                 return SoupWordSolution(
                     word = word,
-                    startCoordinates = Coordinates(x = (board.size - 1) - startPosRow, y = rowIndex + startPosRow),
+                    startCoordinates = Coordinates(
+                        x = (board.size - 1) - startPosRow,
+                        y = rowIndex + startPosRow
+                    ),
                     endCoordinates = Coordinates(
                         x = (board.size - 1) - startPosRow - (word.length - 1),
                         y = rowIndex + startPosRow + word.length - 1
@@ -415,9 +418,56 @@ class SoupSolver(
      * @return A solution, or `null` if no solution was found
      */
     private fun checkUpwardsDiagonal(word: String): SoupWordSolution? {
-        TODO()
-    }
+        for (rowIndex in board.indices) {
+            // An upwards diagonal is the downwards diagonal reversed, when the word is built for a row (since a diagonal one
+            // way starts at a row and ends at a column on the other side)
+            val columnWord = buildReverseDownwardDiagonal(rowIndex, buildForColumns = false).reversed()
 
+            // We need to ignore the case as words can overlap, which means it can match either
+            val startPosColumn = columnWord.indexOf(word, ignoreCase = true)
+
+            if (startPosColumn != -1) {
+                return SoupWordSolution(
+                    word = word,
+                    startCoordinates = Coordinates(
+                        x = rowIndex + startPosColumn,
+                        y = (board.size - 1) - startPosColumn
+                    ),
+                    endCoordinates = Coordinates(
+                        x = rowIndex + startPosColumn + (word.length - 1),
+                        y = (board.size - 1) - startPosColumn - (word.length - 1)
+                    ),
+                    direction = WordDirection.DIAGONAL_UP
+                )
+            }
+
+            // A reversed upwards diagonal is the downwards diagonal reversed
+            val rowWord = buildReverseDownwardDiagonal(rowIndex, buildForColumns = true).reversed()
+
+            // We need to ignore the case as words can overlap, which means it can match either
+            val startPosRow = rowWord.indexOf(word, ignoreCase = true)
+
+            if (startPosRow != -1) {
+                return SoupWordSolution(
+                    word = word,
+                    startCoordinates = Coordinates(
+                        // This is normal left-to-right, so the start index is the x index
+                        x = startPosRow,
+                        y = (board.size - 1) - rowIndex - startPosRow
+                    ),
+                    endCoordinates = Coordinates(
+                        x = startPosRow + (word.length - 1),
+                        // + 1 for the word index (this is a "reversed" word for y)
+                        y = (board.size - 1) - rowIndex - startPosRow - word.length + 1
+                    ),
+                    direction = WordDirection.DIAGONAL_UP
+                )
+            }
+        }
+
+        // No solution found
+        return null
+    }
 
     /**
      * Builds a word on the downward reverse diagonal for a column or row in [board]. Words are built from the top right
