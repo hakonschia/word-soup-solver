@@ -341,6 +341,405 @@ internal class SoupSolverTest {
         assertNull(solution)
     }
 
+
+    /**
+     * Tests that a horizontal word produces the correct generated board
+     */
+    @Test
+    fun generatedBoardHorizontalWord() {
+        val board = arrayOf(
+            charArrayOf('E', 'S', 'L', 'F', 'V'),
+            charArrayOf('R', 'N', 'E', 'S', 'P'),
+            charArrayOf('E', 'O', 'T', 'Q', 'W'),
+            charArrayOf('A', 'M', 'I', 'M', 'F'),
+            charArrayOf('T', 'F', 'S', 'S', 'Ø'),
+        )
+
+        val solver = SoupSolver(board)
+
+        var generatedBoard: String
+
+        // ESL is at the top row
+        solver.findWord("ESL")
+
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                E S L f v
+                r n e s p
+                e o t q w
+                a m i m f
+                t f s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+
+        solver.findWord("TQW")
+        assertEquals(
+            """
+                E S L f v
+                r n e s p
+                e o T Q W
+                a m i m f
+                t f s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+    }
+
+    /**
+     * Tests that a reverse horizontal word produces the correct generated board
+     */
+    @Test
+    fun generatedBoardReverseHorizontalWord() {
+        val board = arrayOf(
+            charArrayOf('E', 'S', 'L', 'F', 'V'),
+            charArrayOf('R', 'N', 'E', 'S', 'P'),
+            charArrayOf('E', 'O', 'T', 'Q', 'W'),
+            charArrayOf('A', 'M', 'I', 'M', 'F'),
+            charArrayOf('T', 'F', 'S', 'S', 'Ø'),
+        )
+
+        val solver = SoupSolver(board)
+
+        var generatedBoard: String
+
+        solver.findWord("FLS")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e S L F v
+                r n e s p
+                e o t q w
+                a m i m f
+                t f s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+
+        solver.findWord("FMI")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e S L F v
+                r n e s p
+                e o t q w
+                a m I M F
+                t f s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+    }
+    /*
+        /**
+     * Tests that a <> word produces the correct generated board
+     */
+    @Test
+    fun generatedBoard<>Word() {
+        val board = arrayOf(
+            charArrayOf('E', 'S', 'L', 'F', 'V'),
+            charArrayOf('R', 'N', 'E', 'S', 'P'),
+            charArrayOf('E', 'O', 'T', 'Q', 'W'),
+            charArrayOf('A', 'M', 'I', 'M', 'F'),
+            charArrayOf('T', 'F', 'S', 'S', 'Ø'),
+        )
+
+        val solver = SoupSolver(board)
+
+        var generatedBoard: String
+
+        solver.findWord("FLS")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e s l f v
+                r n e s p
+                e o t q w
+                a m i m f
+                t f s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+    }
+     */
+
+    /**
+     * Tests that a vertical word produces the correct generated board
+     */
+    @Test
+    fun generatedBoardVerticalWord() {
+        val board = arrayOf(
+            charArrayOf('E', 'S', 'L', 'F', 'V'),
+            charArrayOf('R', 'N', 'E', 'S', 'P'),
+            charArrayOf('E', 'O', 'T', 'Q', 'W'),
+            charArrayOf('A', 'M', 'I', 'M', 'F'),
+            charArrayOf('T', 'F', 'S', 'S', 'Ø'),
+        )
+
+        val solver = SoupSolver(board)
+
+        var generatedBoard: String
+
+        solver.findWord("REA")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e s l f v
+                R n e s p
+                E o t q w
+                A m i m f
+                t f s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+
+        solver.findWord("WFØ")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e s l f v
+                R n e s p
+                E o t q W
+                A m i m F
+                t f s s Ø
+            """.trimIndent(),
+            generatedBoard
+        )
+    }
+
+    /**
+     * Tests that a reverse vertical word produces the correct generated board
+     */
+    @Test
+    fun generatedBoardReverseVerticalWord() {
+        val board = arrayOf(
+            charArrayOf('E', 'S', 'L', 'F', 'V'),
+            charArrayOf('R', 'N', 'E', 'S', 'P'),
+            charArrayOf('E', 'O', 'T', 'Q', 'W'),
+            charArrayOf('A', 'M', 'I', 'M', 'F'),
+            charArrayOf('T', 'F', 'S', 'S', 'Ø'),
+        )
+
+        val solver = SoupSolver(board)
+
+        var generatedBoard: String
+
+        solver.findWord("FMO")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e s l f v
+                r n e s p
+                e O t q w
+                a M i m f
+                t F s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+
+        solver.findWord("MQS")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e s l f v
+                r n e S p
+                e O t Q w
+                a M i M f
+                t F s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+    }
+
+    /**
+     * Tests that a downwards diagonal word produces the correct generated board
+     */
+    @Test
+    fun generatedBoardDownwardsDiagonalWord() {
+        val board = arrayOf(
+            charArrayOf('E', 'S', 'L', 'F', 'V'),
+            charArrayOf('R', 'N', 'E', 'S', 'P'),
+            charArrayOf('E', 'O', 'T', 'Q', 'W'),
+            charArrayOf('A', 'M', 'I', 'M', 'F'),
+            charArrayOf('T', 'F', 'S', 'S', 'Ø'),
+        )
+
+        val solver = SoupSolver(board)
+
+        var generatedBoard: String
+
+        solver.findWord("ENT")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                E s l f v
+                r N e s p
+                e o T q w
+                a m i m f
+                t f s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+
+        solver.findWord("TMØ")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                E s l f v
+                r N e s p
+                e o T q w
+                a m i M f
+                t f s s Ø
+            """.trimIndent(),
+            generatedBoard
+        )
+    }
+
+    /**
+     * Tests that a reverse downwards diagonal word produces the correct generated board
+     */
+    @Test
+    fun generatedBoardReverseDownwardsDiagonalWord() {
+        val board = arrayOf(
+            charArrayOf('E', 'S', 'L', 'F', 'V'),
+            charArrayOf('R', 'N', 'E', 'S', 'P'),
+            charArrayOf('E', 'O', 'T', 'Q', 'W'),
+            charArrayOf('A', 'M', 'I', 'M', 'F'),
+            charArrayOf('T', 'F', 'S', 'S', 'Ø'),
+        )
+
+        val solver = SoupSolver(board)
+
+        var generatedBoard: String
+
+        solver.findWord("VST")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e s l f V
+                r n e S p
+                e o T q w
+                a m i m f
+                t f s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+
+        solver.findWord("WMS")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e s l f V
+                r n e S p
+                e o T q W
+                a m i M f
+                t f S s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+    }
+
+    /**
+     * Tests that an upwards diagonal word produces the correct generated board
+     */
+    @Test
+    fun generatedBoardUpwardsDiagonalWord() {
+        val board = arrayOf(
+            charArrayOf('E', 'S', 'L', 'F', 'V'),
+            charArrayOf('R', 'N', 'E', 'S', 'P'),
+            charArrayOf('E', 'O', 'T', 'Q', 'W'),
+            charArrayOf('A', 'M', 'I', 'M', 'F'),
+            charArrayOf('T', 'F', 'S', 'S', 'Ø'),
+        )
+
+        val solver = SoupSolver(board)
+
+        var generatedBoard: String
+
+        solver.findWord("TMT")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e s l f v
+                r n e s p
+                e o T q w
+                a M i m f
+                T f s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+
+        solver.findWord("RS")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e S l f v
+                R n e s p
+                e o T q w
+                a M i m f
+                T f s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+    }
+
+    /**
+     * Tests that a reverse upwards diagonal word produces the correct generated board
+     */
+    @Test
+    fun generatedBoardReverseUpwardsDiagonalWord() {
+        val board = arrayOf(
+            charArrayOf('E', 'S', 'L', 'F', 'V'),
+            charArrayOf('R', 'N', 'E', 'S', 'P'),
+            charArrayOf('E', 'O', 'T', 'Q', 'W'),
+            charArrayOf('A', 'M', 'I', 'M', 'F'),
+            charArrayOf('T', 'F', 'S', 'S', 'Ø'),
+        )
+
+        val solver = SoupSolver(board)
+
+        var generatedBoard: String
+
+        solver.findWord("SIO")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e s l f v
+                r n e s p
+                e O t q w
+                a m I m f
+                t f s S ø
+            """.trimIndent(),
+            generatedBoard
+        )
+
+        solver.findWord("SIO")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e s l f v
+                r n e s p
+                e O t q w
+                a m I m f
+                t f s S ø
+            """.trimIndent(),
+            generatedBoard
+        )
+
+        solver.findWord("WSL")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                e s L f v
+                r n e S p
+                e O t q W
+                a m I m f
+                t f s S ø
+            """.trimIndent(),
+            generatedBoard
+        )
+    }
+
     @Test
     fun boardGeneratedBySolverHighlightsSolvedWords() {
         val board = arrayOf(
