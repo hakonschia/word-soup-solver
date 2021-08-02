@@ -107,6 +107,59 @@ class SoupSolver(
      */
     private fun modifySolutionBoard(solution: SoupWordSolution) {
         // Change boardWithSolutions so that the word is capitalized in the matrix
+
+        val word = solution.word
+        word.forEachIndexed { index, _ ->
+            val x = solution.startCoordinates.x + index
+            val y = solution.startCoordinates.y + index
+
+            val coordinatesToChange: Coordinates = when (solution.direction) {
+                // Moving horizontally, only the x changes
+                WordDirection.HORIZONTAL -> {
+                    Coordinates(x = solution.startCoordinates.x + index, y = solution.startCoordinates.y)
+                }
+
+                // Moving reverse horizontally, only the x changes, but subtract the index
+                WordDirection.HORIZONTAL_REVERSE -> {
+                    Coordinates(x = solution.startCoordinates.x - index, y = solution.startCoordinates.y)
+                }
+
+                // Moving vertically, only the y changes
+                WordDirection.VERTICAL -> {
+                    Coordinates(x = solution.startCoordinates.x, y = solution.startCoordinates.y + index)
+                }
+
+                // Moving vertically horizontally, only the y changes, but subtract the index
+                WordDirection.VERTICAL_REVERSE -> {
+                    Coordinates(x = solution.startCoordinates.x, y = solution.startCoordinates.y - index)
+                }
+
+                // Moving diagonally down, x and y both change
+                WordDirection.DIAGONAL_DOWN -> {
+                    Coordinates(x = solution.startCoordinates.x + index, y = solution.startCoordinates.y + index)
+                }
+
+                // Moving diagonally down reversed, x change is negative, y is positive
+                WordDirection.DIAGONAL_DOWN_REVERSE -> {
+                    Coordinates(x = solution.startCoordinates.x - index, y = solution.startCoordinates.y + index)
+                }
+
+                // Moving diagonally up, x change is positive, y is negative
+                WordDirection.DIAGONAL_UP -> {
+                    Coordinates(x = solution.startCoordinates.x + index, y = solution.startCoordinates.y - index)
+                }
+
+                // Moving diagonally reversed up, x and y both change (negatively)
+                WordDirection.DIAGONAL_UP_REVERSE -> {
+                    Coordinates(x = solution.startCoordinates.x - index, y = solution.startCoordinates.y - index)
+                }
+            }
+
+            val xToChange = coordinatesToChange.x
+            val yToChange = coordinatesToChange.y
+
+            boardWithSolutions[yToChange][xToChange] = boardWithSolutions[yToChange][xToChange].uppercaseChar()
+        }
     }
 
 
