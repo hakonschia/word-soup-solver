@@ -341,4 +341,61 @@ internal class SoupSolverTest {
         assertNull(solution)
     }
 
+    @Test
+    fun boardGeneratedBySolverHighlightsSolvedWords() {
+        val board = arrayOf(
+            charArrayOf('E', 'S', 'L', 'F', 'V'),
+            charArrayOf('R', 'N', 'E', 'S', 'P'),
+            charArrayOf('E', 'O', 'T', 'Q', 'W'),
+            charArrayOf('A', 'M', 'I', 'M', 'F'),
+            charArrayOf('T', 'F', 'S', 'S', 'Ø'),
+        )
+
+        val solver = SoupSolver(board)
+
+        var generatedBoard: String
+
+        // ESL is at the top row
+        solver.findWord("ESL")
+
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                E S L f v
+                r n e s p
+                e o t q w
+                a m i m f
+                t f s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+
+        // The "L" in "LET" is part of "ESL", so this tests that the highlight of one character can be part of two words
+        solver.findWord("LET")
+
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                E S L f v
+                r n E s p
+                e o T q w
+                a m i m f
+                t f s s ø
+            """.trimIndent(),
+            generatedBoard
+        )
+
+        solver.findWord("ØMT")
+        generatedBoard = solver.generateBoard()
+        assertEquals(
+            """
+                E S L f v
+                r n E s p
+                e o T q w
+                a m i M f
+                t f s s Ø
+            """.trimIndent(),
+            generatedBoard
+        )
+    }
 }
