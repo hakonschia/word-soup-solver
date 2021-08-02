@@ -10,6 +10,34 @@ import kotlin.test.assertNull
 
 internal class SoupSolverTest {
 
+    /**
+     * Tests that giving a non-square n*n board to the constructor of [SoupSolver] throws an error
+     */
+    @Test(expected = IllegalStateException::class)
+    fun nonSquareBoardThrowsException() {
+        SoupSolver(
+            arrayOf(
+                charArrayOf('A', 'B', 'C'),
+                charArrayOf('A', 'B')
+            )
+        )
+    }
+
+    /**
+     * Tests that giving a square n*n board to the constructor of [SoupSolver] does not throw an error
+     */
+    @Test
+    fun squareBoardDoesNotThrowException() {
+        SoupSolver(
+            arrayOf(
+                charArrayOf('A', 'B', 'C'),
+                charArrayOf('A', 'B', 'C'),
+                charArrayOf('A', 'B', 'D')
+            )
+        )
+    }
+
+
     @Test
     fun testValidWords() {
         val board = arrayOf(

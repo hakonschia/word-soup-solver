@@ -478,8 +478,6 @@ class SoupSolver(
         for (rowIndex in board.indices) {
             val columnWord = buildDownwardDiagonal(rowIndex, buildForColumns = false).reversed()
 
-            println(columnWord)
-
             // We need to ignore the case as words can overlap, which means it can match either
             val startPosColumn = columnWord.indexOf(word, ignoreCase = true)
 
