@@ -1,14 +1,10 @@
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
@@ -17,8 +13,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextLayoutInput
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import soup.SoupSolver
+import soup.SoupWordSolution
 
 const val EXIT_MESSAGE = "-1"
 
@@ -100,9 +102,39 @@ fun main() = Window {
 
     val solver = SoupSolver(board)
 
-    LazyVerticalGrid(cells = GridCells.Fixed(board.size)) {
-        items(count = board.size * board.size) { pos ->
-            BoardCell(board, pos)
+    Column {
+        Row(
+            modifier = Modifier.padding(start = 2.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            var input by remember { mutableStateOf("") }
+            TextField(
+                value = input,
+                onValueChange = {
+                    input = it
+                }, label = {
+                    Text("Word")
+                }
+            )
+
+            Button(
+                onClick = {
+                    if (input.isNotEmpty()) {
+                        val solution = solver.findWord(input)
+                    }
+                },
+                modifier = Modifier.padding(start = 4.dp)
+            ) {
+                Text("Find")
+            }
+        }
+
+        Row {
+            LazyVerticalGrid(cells = GridCells.Fixed(board.size)) {
+                items(count = board.size * board.size) { pos ->
+                    BoardCell(board, pos)
+                }
+            }
         }
     }
 }
