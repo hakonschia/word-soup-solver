@@ -11,10 +11,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import soup.SoupSolver
 import soup.SoupWordSolution
+import soup.WordDirection
+import util.SizeDp
 
 /**
  * The size of a cell in the board
@@ -26,7 +29,8 @@ val CELL_SIZE = 35.dp
  */
 val CELL_PADDING = 2.dp
 
-fun Color.Companion.WordSolution() = Color(0x88FF3838)
+val Color.Companion.WordSolution
+    get() = Color(0x88FF3838)
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -138,17 +142,61 @@ fun BoardCell(board: Array<CharArray>, row: Int, column: Int) {
  */
 @Composable
 fun SolutionArrow(solution: SoupWordSolution) {
-    val height = CELL_SIZE
-    val width = CELL_SIZE * solution.word.length
+    val isDiagonally = when (solution.direction) {
+        WordDirection.HORIZONTAL, WordDirection.HORIZONTAL_REVERSE, WordDirection.VERTICAL, WordDirection.VERTICAL_REVERSE -> false
+        WordDirection.DIAGONAL_DOWN, WordDirection.DIAGONAL_DOWN_REVERSE, WordDirection.DIAGONAL_UP, WordDirection.DIAGONAL_UP_REVERSE -> true
+    }
+
+    val size = when (solution.direction) {
+        WordDirection.HORIZONTAL, WordDirection.HORIZONTAL_REVERSE -> {
+            SizeDp(width = CELL_SIZE * solution.word.length, height = CELL_SIZE)
+        }
+
+        // Vertical is just horizontal reversed
+        WordDirection.VERTICAL, WordDirection.VERTICAL_REVERSE -> {
+            SizeDp(width = CELL_SIZE, height = CELL_SIZE * solution.word.length)
+        }
+
+        // TODO
+        WordDirection.DIAGONAL_DOWN, WordDirection.DIAGONAL_DOWN_REVERSE -> TODO()
+        WordDirection.DIAGONAL_UP, WordDirection.DIAGONAL_UP_REVERSE-> TODO()
+    }
+
+    val rotation = when (solution.direction) {
+        WordDirection.HORIZONTAL, WordDirection.HORIZONTAL_REVERSE -> 0f
+        WordDirection.VERTICAL, WordDirection.VERTICAL_REVERSE -> 0f
+        WordDirection.DIAGONAL_DOWN, WordDirection.DIAGONAL_DOWN_REVERSE -> 45f
+        WordDirection.DIAGONAL_UP, WordDirection.DIAGONAL_UP_REVERSE-> 315f
+    }
+
+    // first = x, second = y
+    val paddings = when (solution.direction) {
+        WordDirection.HORIZONTAL -> 0.dp to 0.dp
+        // It's just offset backwards horizontally
+        WordDirection.HORIZONTAL_REVERSE -> -CELL_SIZE * (solution.word.length - 1) to 0.dp
+        WordDirection.VERTICAL -> 0.dp to 0.dp
+        WordDirection.VERTICAL_REVERSE -> 0.dp to -CELL_SIZE * (solution.word.length - 1)
+
+        // TODO
+        WordDirection.DIAGONAL_DOWN -> 0.dp to 0.dp
+        WordDirection.DIAGONAL_DOWN_REVERSE -> 0.dp to 0.dp
+        WordDirection.DIAGONAL_UP -> 0.dp to 0.dp
+        WordDirection.DIAGONAL_UP_REVERSE -> 0.dp to 0.dp
+    }
 
     Column(
         modifier = Modifier
-            .padding(start = CELL_SIZE * solution.startCoordinates.x)
-            .requiredHeight(height)
-            .requiredWidth(width)
+            // The paddings are basically the coordinates we start at (start = x, top = y)
+            .padding(
+                start = CELL_SIZE * solution.startCoordinates.x + paddings.first,
+                top = CELL_SIZE * solution.startCoordinates.y + paddings.second
+            )
+            .height(size.height)
+            .width(size.width)
+            .rotate(rotation)
             .border(
                 width = 2.dp,
-                color = Color.WordSolution()
-            ),
+                color = Color.WordSolution
+            )
     ) { }
 }
