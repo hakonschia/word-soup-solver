@@ -1,26 +1,27 @@
 package tests
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import soup.SoupSolver
 import soup.SoupWordSolution
 import soup.WordDirection
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import kotlin.test.*
 
 internal class SoupSolverTest {
 
     /**
      * Tests that giving a non-square n*n board to the constructor of [SoupSolver] throws an error
      */
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun nonSquareBoardThrowsException() {
-        SoupSolver(
-            arrayOf(
-                charArrayOf('A', 'B', 'C'),
-                charArrayOf('A', 'B')
+        assertThrows<IllegalStateException> {
+            SoupSolver(
+                arrayOf(
+                    charArrayOf('A', 'B', 'C'),
+                    charArrayOf('A', 'B')
+                )
             )
-        )
+        }
     }
 
     /**
