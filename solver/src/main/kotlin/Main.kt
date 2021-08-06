@@ -1,12 +1,22 @@
 import androidx.compose.desktop.Window
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.Card
+import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import soup.SoupSolver
 
@@ -92,23 +102,40 @@ fun main() = Window {
 
     LazyVerticalGrid(cells = GridCells.Fixed(board.size)) {
         items(count = board.size * board.size) { pos ->
-            val row = pos / board.size
-            val column = pos % board.size
-
-            println("row=$row, column=$column")
-
-
-            Card(
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = Color.Gray
-                )
-            ) {
-                Text(
-                    text = board[row][column].uppercase(),
-                    textAlign = TextAlign.Center
-                )
-            }
+            BoardCell(board, pos)
         }
     }
+}
+
+
+/**
+ * Composable for displaying a grid cell on a board
+ *
+ * @param board The board to use
+ * @param position The position in the board this cell
+ */
+@Composable
+fun BoardCell(board: Array<CharArray>, position: Int) {
+    // Size of the cell
+    val size = 35.dp
+
+    val row = position / board.size
+    val column = position % board.size
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .height(size)
+            .width(size)
+            .padding(2.dp)
+            .border(
+                width = 1.dp,
+                color = Color.Gray
+            )
+    ) {
+        Text(
+            text = board[row][column].uppercase()
+        )
+    }
+
 }
