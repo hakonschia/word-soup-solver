@@ -52,7 +52,8 @@ class SoupSolver(
      *
      * @param word The word to find
      *
-     * @return The solution for the word, or `null` if the word wasn't found
+     * @return The solution for the word, or `null` if the word wasn't found. If the solution is a duplicate then it is
+     * still returned here, but is not added to [solutions]
      */
     fun findWord(word: String): SoupWordSolution? {
         val checkers = listOf(

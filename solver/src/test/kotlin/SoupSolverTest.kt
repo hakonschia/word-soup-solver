@@ -716,4 +716,33 @@ internal class SoupSolverTest {
             solver.generateBoard()
         )
     }
+
+    /**
+     * Tests that submitting the same word multiple times does not add multiple solutions to [SoupSolver.solutions]
+     */
+    @Test
+    fun submittingTheSameWordDoesNotProduceMultipleSolutions() {
+        val board = arrayOf(
+            charArrayOf('E', 'S', 'L', 'F', 'V'),
+            charArrayOf('R', 'N', 'E', 'S', 'P'),
+            charArrayOf('E', 'O', 'T', 'Q', 'W'),
+            charArrayOf('A', 'M', 'I', 'M', 'F'),
+            charArrayOf('T', 'F', 'S', 'S', 'Ø'),
+        )
+
+        val solver = SoupSolver(board)
+
+        var solution: SoupWordSolution?
+
+        solution = solver.findWord("ENT")
+        assertNotNull(solution)
+
+        assertEquals(1, solver.solutions.size)
+
+        // The solution should still be returned, but not added to the solutions list
+        solution = solver.findWord("ENT")
+        assertNotNull(solution)
+
+        assertEquals(1, solver.solutions.size)
+    }
 }
