@@ -185,6 +185,10 @@ fun SolutionArrow(solution: SoupWordSolution) {
         // since the rotation point will be stationary
         WordDirection.DIAGONAL_DOWN -> 0.dp to -CELL_SIZE * 0.5f
 
+        // The reverse of above offsets one cell to the right on the x-axis
+        WordDirection.DIAGONAL_DOWN_REVERSE -> CELL_SIZE to -CELL_SIZE * 0.5f
+
+
         else -> 0.dp to 0.dp
     }
 
