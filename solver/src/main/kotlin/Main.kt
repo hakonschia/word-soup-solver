@@ -184,10 +184,11 @@ fun SolutionArrow(solution: SoupWordSolution) {
         // The rotation point is at the halfway on Y, so that's why we offset by half the size (see graphicsLayer code below)
         // since the rotation point will be stationary
         WordDirection.DIAGONAL_DOWN -> 0.dp to -CELL_SIZE * 0.5f
-
         // The reverse of above offsets one cell to the right on the x-axis
         WordDirection.DIAGONAL_DOWN_REVERSE -> CELL_SIZE to -CELL_SIZE * 0.5f
 
+        // Basically the same as DIAGONAL_DOWN, but positive Y
+        WordDirection.DIAGONAL_UP -> 0.dp to CELL_SIZE * 0.5f
 
         else -> 0.dp to 0.dp
     }
@@ -224,7 +225,8 @@ fun SolutionArrow(solution: SoupWordSolution) {
 
 
                     transformOrigin = TransformOrigin(0f, 0.5f)
-                    rotationZ = animatedProgress.value
+                   // rotationZ = animatedProgress.value
+                    rotationZ = rotation.toFloat()
                 }
             }
             .border(
