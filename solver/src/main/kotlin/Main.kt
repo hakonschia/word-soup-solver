@@ -1,5 +1,6 @@
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -119,6 +120,10 @@ fun main() = Window {
         Row {
             // Box allows for views to overlap
             Box {
+                // Add solutions after so that it is rendered over the board
+                solutions.forEach { solution ->
+                    SolutionArrow(solution)
+                }
                 LazyColumn {
                     itemsIndexed(board) { rowPos, row ->
                         LazyRow {
@@ -129,10 +134,7 @@ fun main() = Window {
                     }
                 }
 
-                // Add solutions after so that it is rendered over the board
-                solutions.forEach { solution ->
-                    SolutionArrow(solution)
-                }
+
             }
         }
 
@@ -250,8 +252,7 @@ fun SolutionArrow(solution: SoupWordSolution) {
                     rotationZ = rotation.toFloat()
                 }
             }
-            .border(
-                width = 2.dp,
+            .background(
                 color = Color.WordSolution,
                 shape = RoundedCornerShape(50)
             ),
