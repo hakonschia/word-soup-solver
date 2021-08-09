@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
 import soup.SoupSolver
 import soup.SoupWordSolution
@@ -224,5 +225,14 @@ fun SolutionArrow(solution: SoupWordSolution) {
                 color = Color.WordSolution,
                 shape = RoundedCornerShape(50)
             ),
-    ) { }
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.End
+    ) {
+        Icon(
+            painter = svgResource("ic_round_arrow_forward_24.xml"),
+            contentDescription = null,
+            modifier = Modifier
+                .size(16.dp)
+        )
+    }
 }
