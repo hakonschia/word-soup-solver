@@ -79,6 +79,7 @@ fun main() = Window {
                     val solution = solver.findWord(input)
                     if (solution != null) {
                         solutions = ArrayList(solver.solutions)
+                        input = ""
                     }
                 }
             }
