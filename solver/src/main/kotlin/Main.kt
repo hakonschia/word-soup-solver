@@ -1,16 +1,12 @@
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
@@ -93,12 +89,6 @@ fun main() = Window {
         Row {
             // Box allows for views to overlap
             Box {
-                // If the grid below is moved then this also has to be moved as the solutions don't have anything
-                // that makes them stick to the board
-                solutions.forEach { solution ->
-                    SolutionArrow(solution)
-                }
-
                 LazyColumn {
                     itemsIndexed(board) { rowPos, row ->
                         LazyRow {
@@ -107,6 +97,11 @@ fun main() = Window {
                             }
                         }
                     }
+                }
+
+                // Add solutions after so that it is rendered over the board
+                solutions.forEach { solution ->
+                    SolutionArrow(solution)
                 }
             }
         }
@@ -171,7 +166,8 @@ fun SolutionArrow(solution: SoupWordSolution) {
         WordDirection.VERTICAL, WordDirection.VERTICAL_REVERSE -> 0
         WordDirection.DIAGONAL_DOWN -> 45
         WordDirection.DIAGONAL_DOWN_REVERSE -> 135
-        WordDirection.DIAGONAL_UP, WordDirection.DIAGONAL_UP_REVERSE-> 315
+        WordDirection.DIAGONAL_UP -> 315
+        WordDirection.DIAGONAL_UP_REVERSE -> 225
     }
 
     // first = x, second = y
@@ -187,8 +183,9 @@ fun SolutionArrow(solution: SoupWordSolution) {
         // The reverse of above offsets one cell to the right on the x-axis
         WordDirection.DIAGONAL_DOWN_REVERSE -> CELL_SIZE to -CELL_SIZE * 0.5f
 
-        // Basically the same as DIAGONAL_DOWN, but positive Y
+        // These two are the same as the other diagonals, but positive Y
         WordDirection.DIAGONAL_UP -> 0.dp to CELL_SIZE * 0.5f
+        WordDirection.DIAGONAL_UP_REVERSE -> CELL_SIZE to CELL_SIZE * 0.5f
 
         else -> 0.dp to 0.dp
     }
@@ -196,16 +193,6 @@ fun SolutionArrow(solution: SoupWordSolution) {
 
     val x = CELL_SIZE * solution.startCoordinates.x + paddings.first
     val y = CELL_SIZE * solution.startCoordinates.y + paddings.second
-
-    val animatedProgress = remember { Animatable(0f) }
-    LaunchedEffect(animatedProgress) {
-        animatedProgress.animateTo(
-            rotation.toFloat(),
-            animationSpec = tween(
-                durationMillis = 2500,
-                delayMillis = 250
-            ))
-    }
 
     Column(
         modifier = Modifier
@@ -215,17 +202,17 @@ fun SolutionArrow(solution: SoupWordSolution) {
             .graphicsLayer {
                 if (rotation != 0) {
                     // The transform origin determines where the rotation is done. Default is at the center (0.5f, 0.5f)
-                    // The rotation point will be stationary, so where we want the rotation point to end is where the start it
+                    // The rotation point will be stationary, i.e. it's the same at the start and end rotation
 
                     // (0, 0.5f) means all the way to the left and halfway down, 0% on x and 50% on y
                     // I.e., the rotation point is at the star:
                     // - - - -
                     // *     |
                     // - - - -
-
-
                     transformOrigin = TransformOrigin(0f, 0.5f)
-                   // rotationZ = animatedProgress.value
+
+                    // We have to set the rotation here and not on the modifier, since the modifier doesn't follow
+                    // the transform origin
                     rotationZ = rotation.toFloat()
                 }
             }
@@ -233,12 +220,6 @@ fun SolutionArrow(solution: SoupWordSolution) {
                 width = 2.dp,
                 color = Color.WordSolution,
                 //shape = RoundedCornerShape(50)
-            ),
-
-        // This can be removed when the text is removed, as it's just a visual helper for development
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "•", textAlign = TextAlign.Center)
-    }
+            )
+    ) { }
 }
