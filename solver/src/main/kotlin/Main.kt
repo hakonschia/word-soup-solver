@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import soup.SoupSolver
 import soup.SoupWordSolution
 import soup.WordDirection
@@ -59,6 +60,8 @@ val solver = SoupSolver(board)
 @OptIn(ExperimentalFoundationApi::class)
 fun main() = Window {
     var solutions by remember { mutableStateOf(listOf<SoupWordSolution>()) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     Column {
         Row(
@@ -80,6 +83,10 @@ fun main() = Window {
                     if (solution != null) {
                         solutions = ArrayList(solver.solutions)
                         input = ""
+                    } else {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(message = "'$input' was not found")
+                        }
                     }
                 }
             }
@@ -93,7 +100,7 @@ fun main() = Window {
                 },
                 singleLine = true,
                 modifier = Modifier.onKeyEvent { event ->
-                    if (event.type == KeyEventType.KeyDown && event.key== Key.Enter) {
+                    if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
                         submitSolution()
                     }
                     false
@@ -128,6 +135,10 @@ fun main() = Window {
                 }
             }
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState
+        )
     }
 }
 
