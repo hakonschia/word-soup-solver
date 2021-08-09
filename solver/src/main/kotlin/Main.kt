@@ -3,6 +3,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -10,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import soup.SoupSolver
 import soup.SoupWordSolution
@@ -29,6 +29,9 @@ val CELL_SIZE = 35.dp
  */
 val CELL_PADDING = 2.dp
 
+/**
+ * The color for word solutions
+ */
 val Color.Companion.WordSolution
     get() = Color(0x88FF3838)
 
@@ -123,7 +126,7 @@ fun BoardCell(board: Array<CharArray>, row: Int, column: Int) {
         modifier = Modifier
             .height(CELL_SIZE)
             .width(CELL_SIZE)
-           // .padding(CELL_PADDING)
+            .padding(CELL_PADDING)
             .border(
                 width = 1.dp,
                 color = Color.Gray
@@ -219,7 +222,7 @@ fun SolutionArrow(solution: SoupWordSolution) {
             .border(
                 width = 2.dp,
                 color = Color.WordSolution,
-                //shape = RoundedCornerShape(50)
-            )
+                shape = RoundedCornerShape(50)
+            ),
     ) { }
 }
