@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.svgResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import soup.SoupSolver
 import soup.SoupWordSolution
@@ -147,13 +148,8 @@ fun BoardCell(board: Array<CharArray>, row: Int, column: Int) {
 @Composable
 fun SolutionArrow(solution: SoupWordSolution) {
     val size = when (solution.direction) {
-        WordDirection.HORIZONTAL, WordDirection.HORIZONTAL_REVERSE -> {
+        WordDirection.HORIZONTAL, WordDirection.HORIZONTAL_REVERSE, WordDirection.VERTICAL, WordDirection.VERTICAL_REVERSE -> {
             SizeDp(width = CELL_SIZE * solution.word.length, height = CELL_SIZE)
-        }
-
-        // Vertical is just horizontal reversed
-        WordDirection.VERTICAL, WordDirection.VERTICAL_REVERSE -> {
-            SizeDp(width = CELL_SIZE, height = CELL_SIZE * solution.word.length)
         }
 
         // This is pythagoras
@@ -166,8 +162,10 @@ fun SolutionArrow(solution: SoupWordSolution) {
     }
 
     val rotation = when (solution.direction) {
-        WordDirection.HORIZONTAL, WordDirection.HORIZONTAL_REVERSE -> 0
-        WordDirection.VERTICAL, WordDirection.VERTICAL_REVERSE -> 0
+        WordDirection.HORIZONTAL -> 0
+        WordDirection.HORIZONTAL_REVERSE -> 180
+        WordDirection.VERTICAL -> 90
+        WordDirection.VERTICAL_REVERSE -> 270
         WordDirection.DIAGONAL_DOWN -> 45
         WordDirection.DIAGONAL_DOWN_REVERSE -> 135
         WordDirection.DIAGONAL_UP -> 315
@@ -176,13 +174,18 @@ fun SolutionArrow(solution: SoupWordSolution) {
 
     // first = x, second = y
     val paddings = when (solution.direction) {
-        // It's just offset backwards horizontally
-        WordDirection.HORIZONTAL_REVERSE -> -CELL_SIZE * (solution.word.length - 1) to 0.dp
-        WordDirection.VERTICAL_REVERSE -> 0.dp to -CELL_SIZE * (solution.word.length - 1)
+        WordDirection.HORIZONTAL -> 0.dp to 0.dp
 
         // For the rotation to end up at the correct place we need to offset it as well
-        // The rotation point is at the halfway on Y, so that's why we offset by half the size (see graphicsLayer code below)
-        // since the rotation point will be stationary
+        // The rotation point is at the halfway on Y, and doesn't move when rotated
+        // So the paddings/offsets below are correcting the rotation point
+
+        // Starts at the right cell, but will be flipped so must be moved one cell to the right
+        WordDirection.HORIZONTAL_REVERSE -> CELL_SIZE to 0.dp
+
+        WordDirection.VERTICAL -> CELL_SIZE * 0.5f to -CELL_SIZE * 0.5f
+        WordDirection.VERTICAL_REVERSE -> CELL_SIZE * 0.5f to CELL_SIZE * 0.5f
+
         WordDirection.DIAGONAL_DOWN -> 0.dp to -CELL_SIZE * 0.5f
         // The reverse of above offsets one cell to the right on the x-axis
         WordDirection.DIAGONAL_DOWN_REVERSE -> CELL_SIZE to -CELL_SIZE * 0.5f
@@ -190,8 +193,6 @@ fun SolutionArrow(solution: SoupWordSolution) {
         // These two are the same as the other diagonals, but positive Y
         WordDirection.DIAGONAL_UP -> 0.dp to CELL_SIZE * 0.5f
         WordDirection.DIAGONAL_UP_REVERSE -> CELL_SIZE to CELL_SIZE * 0.5f
-
-        else -> 0.dp to 0.dp
     }
 
 
