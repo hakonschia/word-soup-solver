@@ -256,7 +256,7 @@ fun SolutionArrow(solution: SoupWordSolution) {
                 shape = RoundedCornerShape(50)
             ),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.End
+        horizontalAlignment = Alignment.Start
     ) {
         Icon(
             painter = svgResource("ic_round_arrow_forward_24.xml"),
