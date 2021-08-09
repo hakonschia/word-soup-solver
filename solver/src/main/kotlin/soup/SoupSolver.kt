@@ -24,7 +24,10 @@ class SoupSolver(
      */
     private val _solutions: MutableList<SoupWordSolution> = ArrayList()
 
-    val solutions :List<SoupWordSolution> = _solutions
+    /**
+     * The solutions found so far. This list will not contain duplicate solutions
+     */
+    val solutions: List<SoupWordSolution> = _solutions
 
     init {
         board = boardToSolve.clone()
@@ -68,8 +71,11 @@ class SoupSolver(
             val solution = checker.invoke(word)
 
             if (solution != null) {
-                _solutions.add(solution)
-                modifySolutionBoard(solution)
+                // If the solution has been found before we don't need to do anything here
+                if (!solutions.contains(solution)) {
+                    _solutions.add(solution)
+                    modifySolutionBoard(solution)
+                }
 
                 return solution
             }

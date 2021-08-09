@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.svgResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import soup.SoupSolver
 import soup.SoupWordSolution
@@ -66,24 +66,42 @@ fun main() = Window {
             verticalAlignment = Alignment.CenterVertically
         ) {
             var input by remember { mutableStateOf("") }
+            var lastSubmittedSolution by remember { mutableStateOf("") }
+
+            /**
+             * Calls [SoupSolver.findWord] with the value of input and updates the solutions if found
+             *
+             * Does not attempt to submit duplicates right after each other, or empty strings
+             */
+            fun submitSolution() {
+                if (input.isNotEmpty() && input != lastSubmittedSolution) {
+                    lastSubmittedSolution = input
+                    val solution = solver.findWord(input)
+                    if (solution != null) {
+                        solutions = ArrayList(solver.solutions)
+                    }
+                }
+            }
+
             TextField(
                 value = input,
                 onValueChange = {
                     input = it
                 }, label = {
                     Text("Word")
-                }
+                },
+                singleLine = true,
+                modifier = Modifier.onKeyEvent { event ->
+                    if (event.type == KeyEventType.KeyDown && event.key== Key.Enter) {
+                        submitSolution()
+                    }
+                    false
+                },
+
             )
 
             Button(
-                onClick = {
-                    if (input.isNotEmpty()) {
-                        val solution = solver.findWord(input)
-                        if (solution != null) {
-                            solutions = ArrayList(solver.solutions)
-                        }
-                    }
-                },
+                onClick = { submitSolution() },
                 modifier = Modifier.padding(start = 4.dp)
             ) {
                 Text("Find")
@@ -103,7 +121,6 @@ fun main() = Window {
                     }
                 }
 
-                println(solver)
                 // Add solutions after so that it is rendered over the board
                 solutions.forEach { solution ->
                     SolutionArrow(solution)
