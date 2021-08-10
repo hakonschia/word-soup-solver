@@ -94,19 +94,15 @@ fun main() = Window {
 
             TextField(
                 value = input,
-                onValueChange = {
-                    input = it
-                }, label = {
-                    Text("Word")
-                },
+                onValueChange = { input = it },
+                label = { Text("Word") },
                 singleLine = true,
                 modifier = Modifier.onKeyEvent { event ->
                     if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
                         submitSolution()
                     }
-                    false
-                },
-
+                    return@onKeyEvent false
+                }
             )
 
             Button(
@@ -120,10 +116,10 @@ fun main() = Window {
         Row {
             // Box allows for views to overlap
             Box {
-                // Add solutions after so that it is rendered over the board
                 solutions.forEach { solution ->
                     SolutionArrow(solution)
                 }
+
                 LazyColumn {
                     itemsIndexed(board) { rowPos, row ->
                         LazyRow {
@@ -133,8 +129,6 @@ fun main() = Window {
                         }
                     }
                 }
-
-
             }
         }
 
@@ -207,9 +201,9 @@ fun SolutionArrow(solution: SoupWordSolution) {
     val paddings = when (solution.direction) {
         WordDirection.HORIZONTAL -> 0.dp to 0.dp
 
-        // For the rotation to end up at the correct place we need to offset it as well
+        // For the rotation to end up at the correct place we need to offset it
         // The rotation point is at the halfway on Y, and doesn't move when rotated
-        // So the paddings/offsets below are correcting the rotation point
+        // The offsets below are correcting the rotation point to the correct spot
 
         // Starts at the right cell, but will be flipped so must be moved one cell to the right
         WordDirection.HORIZONTAL_REVERSE -> CELL_SIZE to 0.dp
@@ -226,7 +220,6 @@ fun SolutionArrow(solution: SoupWordSolution) {
         WordDirection.DIAGONAL_UP_REVERSE -> CELL_SIZE to CELL_SIZE * 0.5f
     }
 
-
     val x = CELL_SIZE * solution.startCoordinates.x + paddings.first
     val y = CELL_SIZE * solution.startCoordinates.y + paddings.second
 
@@ -240,10 +233,9 @@ fun SolutionArrow(solution: SoupWordSolution) {
                     // The transform origin determines where the rotation is done. Default is at the center (0.5f, 0.5f)
                     // The rotation point will be stationary, i.e. it's the same at the start and end rotation
 
-                    // (0, 0.5f) means all the way to the left and halfway down, 0% on x and 50% on y
-                    // I.e., the rotation point is at the star:
+                    // (0f, 0.5f) means 0% on x and 50% on y. I.e. the rotation point is at the star:
                     // - - - -
-                    // *     |
+                    // *     -
                     // - - - -
                     transformOrigin = TransformOrigin(0f, 0.5f)
 
@@ -261,9 +253,8 @@ fun SolutionArrow(solution: SoupWordSolution) {
     ) {
         Icon(
             painter = svgResource("ic_round_arrow_forward_24.xml"),
-            contentDescription = null,
-            modifier = Modifier
-                .size(16.dp)
+            contentDescription = "Arrow pointing in the direction of the word",
+            modifier = Modifier.size(16.dp)
         )
     }
 }

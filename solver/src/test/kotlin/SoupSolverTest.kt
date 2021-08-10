@@ -360,7 +360,6 @@ internal class SoupSolverTest {
 
         // ESL is at the top row
         solver.findWord("ESL")
-
         assertEquals(
             """
                 E S L f v
