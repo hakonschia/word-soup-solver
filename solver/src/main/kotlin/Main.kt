@@ -2,9 +2,11 @@ import androidx.compose.desktop.Window
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,6 +16,8 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.svgResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import soup.SoupSolver
@@ -48,7 +52,7 @@ val board = arrayOf(
     charArrayOf('Å', 'C', 'F', 'Æ', 'P', 'D', 'N', 'J', 'O', 'I', 'V', 'U', 'Z', 'E'),
     charArrayOf('T', 'N', 'T', 'V', 'R', 'N', 'R', 'S', 'L', 'T', 'L', 'D', 'Æ', 'R'),
     charArrayOf('I', 'E', 'S', 'N', 'E', 'E', 'T', 'O', 'W', 'E', 'V', 'T', 'U', 'M'),
-    charArrayOf('A', 'G', 'R', 'V', 'N', 'I', 'G', 'R', 'F', 'R', 'F', 'Å', 'E', 'E'),
+    charArrayOf('A', 'G', 'R', 'V', 'P', 'I', 'G', 'S', 'F', 'R', 'F', 'Å', 'E', 'E'),
     charArrayOf('Y', 'R', 'S', 'I', 'K', 'E', 'S', 'E', 'Z', 'G', 'S', 'K', 'N', 'S'),
     charArrayOf('B', 'O', 'F', 'E', 'D', 'R', 'P', 'V', 'N', 'E', 'D', 'Y', 'K', 'Æ'),
     charArrayOf('L', 'M', 'R', 'W', 'F', 'Ø', 'X', 'H', 'E', 'W', 'T', 'D', 'H', 'V'),
@@ -63,6 +67,8 @@ fun main() = Window {
     var solutions by remember { mutableStateOf(listOf<SoupWordSolution>()) }
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+
+    var showGridLines by remember { mutableStateOf(true) }
 
     Column {
         Row(
@@ -111,6 +117,15 @@ fun main() = Window {
             ) {
                 Text("Find")
             }
+
+            Checkbox(
+                checked = showGridLines,
+                onCheckedChange = { showGridLines = !showGridLines }
+            )
+            ClickableText(
+                text = AnnotatedString("Show grid lines"),
+                onClick = { showGridLines = !showGridLines }
+            )
         }
 
         Row {
@@ -124,7 +139,7 @@ fun main() = Window {
                     itemsIndexed(board) { rowPos, row ->
                         LazyRow {
                             items(row.size) { column ->
-                                BoardCell(board, rowPos, column)
+                                BoardCell(board, rowPos, column, showGridLines)
                             }
                         }
                     }
@@ -146,7 +161,7 @@ fun main() = Window {
  * @param column The cell column
  */
 @Composable
-fun BoardCell(board: Array<CharArray>, row: Int, column: Int) {
+fun BoardCell(board: Array<CharArray>, row: Int, column: Int, showGridLines: Boolean) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -155,8 +170,8 @@ fun BoardCell(board: Array<CharArray>, row: Int, column: Int) {
             .width(CELL_SIZE)
             .padding(CELL_PADDING)
             .border(
-                width = 1.dp,
-                color = Color.Gray
+                width = if (showGridLines) 1.dp else 0.dp,
+                color = if (showGridLines) Color.Gray else Color.Transparent,
             )
     ) {
         Text(
