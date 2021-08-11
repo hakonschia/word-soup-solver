@@ -19,6 +19,7 @@ import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
 import soup.SoupSolver
 import soup.SoupWordSolution
@@ -189,7 +190,7 @@ fun BoardCell(board: Array<CharArray>, row: Int, column: Int, showGridLines: Boo
 fun SolutionArrow(solution: SoupWordSolution) {
     val size = when (solution.direction) {
         WordDirection.HORIZONTAL, WordDirection.HORIZONTAL_REVERSE, WordDirection.VERTICAL, WordDirection.VERTICAL_REVERSE -> {
-            SizeDp(width = CELL_SIZE * solution.word.length, height = CELL_SIZE)
+            SizeDp(width = (CELL_SIZE * solution.word.length) - CELL_PADDING * 2, height = CELL_SIZE - CELL_PADDING * 2)
         }
 
         // This is pythagoras
@@ -214,16 +215,18 @@ fun SolutionArrow(solution: SoupWordSolution) {
 
     // first = x, second = y
     val paddings = when (solution.direction) {
-        WordDirection.HORIZONTAL -> 0.dp to 0.dp
-
         // For the rotation to end up at the correct place we need to offset it
         // The rotation point is at the halfway on Y, and doesn't move when rotated
         // The offsets below are correcting the rotation point to the correct spot
 
-        // Starts at the right cell, but will be flipped so must be moved one cell to the right
-        WordDirection.HORIZONTAL_REVERSE -> CELL_SIZE to 0.dp
+        // CELL_SIZE offsets the entire column/arrow to the right rotation point
+        // CELL_PADDING offsets so it's inside the cells, not outside (since the size takes out the padding)
 
-        WordDirection.VERTICAL -> CELL_SIZE * 0.5f to -CELL_SIZE * 0.5f
+        WordDirection.HORIZONTAL -> CELL_PADDING to CELL_PADDING
+        // Starts at the right cell, but will be flipped so must be moved one cell to the right
+        WordDirection.HORIZONTAL_REVERSE -> CELL_SIZE - CELL_PADDING to CELL_PADDING
+
+        WordDirection.VERTICAL -> CELL_SIZE * 0.5f to -CELL_SIZE * 0.5f + CELL_PADDING * 2
         WordDirection.VERTICAL_REVERSE -> CELL_SIZE * 0.5f to CELL_SIZE * 0.5f
 
         WordDirection.DIAGONAL_DOWN -> 0.dp to -CELL_SIZE * 0.5f
