@@ -198,7 +198,8 @@ fun SolutionArrow(solution: SoupWordSolution) {
             val cathetus = (CELL_SIZE * solution.word.length).value.pow(2)
             val hypotenuse = sqrt(cathetus + cathetus)
 
-            SizeDp(width = hypotenuse.dp, height = CELL_SIZE)
+            // This should also be adjusted by CELL_PADDING somehow, but don't know yet how
+            SizeDp(width = hypotenuse.dp, height = CELL_SIZE - CELL_PADDING * 2)
         }
     }
 
