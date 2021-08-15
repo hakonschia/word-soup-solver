@@ -117,9 +117,6 @@ class SoupSolver(
 
         val word = solution.word
         word.forEachIndexed { index, _ ->
-            val x = solution.startCoordinates.x + index
-            val y = solution.startCoordinates.y + index
-
             val coordinatesToChange: Coordinates = when (solution.direction) {
                 // Moving horizontally, only the x changes
                 WordDirection.HORIZONTAL -> {
